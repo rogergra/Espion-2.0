@@ -47,5 +47,5 @@ Puis, ouvrez **http://127.0.0.1:5000** dans votre navigateur.
 Projet open-source sous licence MIT. Vous pouvez l'utiliser et le modifier librement.
 
 ## 📬 Contact
-Si vous avez des questions ou des suggestions, contactez-moi via [GitHub](https://github.com/rogergra).
+Si vous avez des questions ou des suggestions, contactez-moi via [GitHub](https://github.com/rogergra), (rogashack@gmail.com).
 
