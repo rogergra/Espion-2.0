@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Détection de Texte Caché</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            color: #333;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 2.8em;
+            color: #4a90e2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: slideDown 1s ease-in-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            animation: popIn 0.8s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.1), rgba(255, 255, 255, 0.1));
+            z-index: -1;
+            animation: gradientMove 3s infinite linear;
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .upload-label {
+            font-size: 1.2em;
+            color: #4a90e2;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        input[type="file"] {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 2px dashed #4a90e2;
+            border-radius: 10px;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        input[type="file"]:hover {
+            border-color: #357ab8;
+            background-color: rgba(74, 144, 226, 0.1);
+        }
+
+        input[type="file"]::file-selector-button {
+            display: none;
+        }
+
+        .upload-instructions {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #4a90e2;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background: #357ab8;
+            transform: translateY(-2px);
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        img {
+            max-width: 45%;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h3 {
+            text-align: center;
+            color: #4a90e2;
+            margin-top: 20px;
+        }
+
+        #extractedText {
+            font-family: 'Courier New', monospace;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        footer a {
+            color: #4a90e2;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #357ab8;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Analyser les Textes Cachés</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label class="upload-label" for="imageUpload">Téléchargez votre image</label>
+        <input id="imageUpload" type="file" name="image" accept="image/*" required>
+        <p class="upload-instructions">Formats acceptés : JPG, PNG, GIF. Taille maximale : 5 Mo.</p>
+        <button type="submit">Détecter</button>
+    </form>
+
+    <div id="result">
+        <div class="image-container" id="images"></div>
+        <h3>Texte Extrait :</h3>
+        <div id="extractedText"></div>
+    </div>
+
+    <footer>
+        <p>Développé avec ❤️ par <a href="#">ROGAS TECH</a></p>
+    </footer>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            document.getElementById('images').innerHTML = '<p>Chargement...</p>';
+
+            const formData = new FormData(e.target);
+            const response = await fetch('/', { method: 'POST', body: formData });
+            const data = await response.json();
+
+            if (data.success) {
+                document.getElementById('images').innerHTML = `
+                    <img src="/uploads/${data.result_image}" alt="Image réparée">
+                `;
+                document.getElementById('extractedText').innerText = data.text || "Aucun texte détecté";
+            } else {
+                document.getElementById('result').innerHTML = `
+                    <p style="color:red;">Erreur : ${data.error}</p>
+                `;
+            }
+        });
+    </script>
+</body>
+
+</html>
