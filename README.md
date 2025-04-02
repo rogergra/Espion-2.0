@@ -24,6 +24,14 @@ Assurez-vous d'avoir **Python 3** installé sur votre machine.
 ### 2️⃣ Installation des dépendances
 Clonez le dépôt et installez les bibliothèques requises :
 ```bash
+##apres avoir installeer python : https://www.python.org/downloads
+##vous devez installer virtuelenv pour pouvoir creer les env virtuel : pip install virtualenv
+##clonage du projet et execution
+#creation de l'environement virtuel 
+
+virtualenv espion # pour ceer
+espion\Scripts\activate
+
 git clone https://github.com/rogergra/Espion-2.0.git
 cd Espion-2.0
 pip install -r requirements.txt
