@@ -56,4 +56,5 @@ Projet open-source sous licence MIT. Vous pouvez l'utiliser et le modifier libre
 
 ## 📬 Contact
 Si vous avez des questions ou des suggestions, contactez-moi via [GitHub](https://github.com/rogergra), (rogashack@gmail.com).
+bye me a cofee rogashack@gmail.com
 
