@@ -40,7 +40,7 @@ Puis, ouvrez **http://127.0.0.1:5000** dans votre navigateur.
 - Python
 - Flask (interface web)
 - OpenCV (traitement d'image)
-- Tesseract OCR (reconnaissance de texte)
+- Tesseract OCR (reconnaissance de texte)  lien du telechargement : https://sourceforge.net/projects/tesseract-ocr.mirror
 - ESRGAN (restauration d'images)
 
 ## 📜 Licence
