@@ -1,46 +1,33 @@
 # Espion-2.0
 
-# Espion 2.0
+# ESPION 2.0 - Forensic Image Reveal Tool
 
-## 📌 Description
-Espion 2.0 est un outil avancé de récupération et d'analyse d'images et de documents. Il permet de :
-- Restaurer du texte effacé ou masqué sur des images et des documents.
-- Détecter et récupérer les parties cachées d'une image (censure, texte barré, fissures, etc.).
-- Appliquer un "CTRL+Z" aux images pour retrouver leur état d'origine.
-- Améliorer la netteté des images floues ou endommagées.
-- Identifier les métadonnées et propriétés cachées des fichiers.
+**Outil avancé de récupération de texte caché, censure, marker et redaction sur images et documents.**
 
-## 🎯 Fonctionnalités principales
-- 🔍 Détection de texte effacé ou masqué.
-- 🖼️ Reconstruction et amélioration d'images dégradées.
-- 🔧 Extraction des propriétés cachées des fichiers.
-- 🌐 Interface web simple avec Flask pour une utilisation facile.
-- 📂 Chargement et traitement des images en local.
+Développé par **Roger Amouzou**  
+**Togo** 🇹🇬  
+**Admin Réseau & Chercheur en Cybersécurité**  
+**Contact :** rogashack@gmail.com  
+**GitHub :** [@rogergra](https://github.com/rogergra)
 
-## 🚀 Installation
-### 1️⃣ Prérequis
-Assurez-vous d'avoir **Python 3** installé sur votre machine.
+### 🎯 Fonctionnalités
+- Reveal texte barré / masqué / marker noir (Blue Channel Inversion + EasyOCR)
+- Détection et suppression de censure / blackout / pixelation
+- Extraction EXIF + métadonnées cachées
+- Inpaint avancé (TELEA)
+- Génération automatique de **rapport PDF forensic** (images avant/après + SHA-256 + texte)
+- Interface web hacker style (Matrix / Terminal)
 
-### 2️⃣ Installation des dépendances
-Clonez le dépôt et installez les bibliothèques requises :
+### 🚀 Installation rapide
+
 ```bash
-##apres avoir installeer python : https://www.python.org/downloads
-##vous devez installer virtuelenv pour pouvoir creer les env virtuel : pip install virtualenv
-##clonage du projet et execution
-#creation de l'environement virtuel 
-
-virtualenv espion # pour ceer
-espion\Scripts\activate
-
 git clone https://github.com/rogergra/Espion-2.0.git
 cd Espion-2.0
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
-```
+python3 app.py
 
-### 3️⃣ Lancer l'application
-Exécutez le fichier principal pour démarrer l'interface web :
-```bash
-python app.py
 ```
 Puis, ouvrez **http://127.0.0.1:5000** dans votre navigateur.
 
@@ -52,8 +39,27 @@ Puis, ouvrez **http://127.0.0.1:5000** dans votre navigateur.
 - ESRGAN (restauration d'images)
 
 ## 📜 Licence
-Projet open-source sous licence MIT. Vous pouvez l'utiliser et le modifier librement.
+MIT License
 
+Copyright (c) 2026 Roger Amouzou (Togo)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ## 📬 Contact
 Si vous avez des questions ou des suggestions, contactez-moi via [GitHub](https://github.com/rogergra), (rogashack@gmail.com).
 bye me a cofee rogashack@gmail.com
