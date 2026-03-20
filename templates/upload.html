@@ -1,243 +1,493 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
-    <title>Détection de Texte Caché</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESPION_2.0 // ROOT_ACCESS_GRANTED</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-            color: #333;
-            animation: fadeIn 1s ease-in-out;
+        :root {
+            --matrix-green: #00ff41;
+            --matrix-green-dim: #00cc33;
+            --bg-black: #000000;
+            --card-bg: #0a0a0a;
+            --border-glow: #003300;
+            --text-dim: #00aa22;
+            --error-red: #ff0044;
+            --warning: #ffaa00;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-black);
+            color: var(--matrix-green);
+            font-family: 'Courier New', 'Consolas', 'Lucida Console', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image:
+                linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes scanline {
+            0% {
+                transform: translateY(-100%);
             }
-            to {
-                opacity: 1;
+
+            100% {
+                transform: translateY(100%);
             }
+        }
+
+        .glitch {
+            position: relative;
+            color: var(--matrix-green);
+            animation: glitch-skew 4s infinite;
+        }
+
+        @keyframes glitch-skew {
+
+            0%,
+            100% {
+                transform: skew(0deg);
+            }
+
+            10% {
+                transform: skew(2deg);
+            }
+
+            20% {
+                transform: skew(-2deg);
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
         }
 
         h1 {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 2.8em;
-            color: #4a90e2;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            animation: slideDown 1s ease-in-out;
+            font-size: 3.2rem;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--matrix-green), 0 0 40px var(--matrix-green-dim);
+            animation: flicker 3s infinite alternate;
         }
 
-        @keyframes slideDown {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
+        @keyframes flicker {
+
+            0%,
+            19%,
+            21%,
+            23%,
+            25%,
+            54%,
+            56%,
+            100% {
+                opacity: 1;
+                text-shadow: 0 0 20px var(--matrix-green);
             }
-            to {
-                transform: translateY(0);
+
+            20%,
+            24%,
+            55% {
+                opacity: 0.4;
+                text-shadow: none;
+            }
+        }
+
+        .terminal-prompt {
+            font-size: 1.4rem;
+            margin: 20px 0;
+            color: var(--text-dim);
+            text-shadow: 0 0 10px var(--matrix-green-dim);
+        }
+
+        .upload-terminal {
+            background: var(--card-bg);
+            border: 2px solid var(--matrix-green-dim);
+            border-radius: 0;
+            padding: 35px;
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.15), inset 0 0 20px rgba(0, 255, 65, 0.08);
+            margin-bottom: 40px;
+        }
+
+        .drop-zone {
+            border: 3px dashed var(--matrix-green-dim);
+            padding: 80px 30px;
+            text-align: center;
+            transition: all 0.4s;
+            cursor: pointer;
+            background: rgba(0, 20, 10, 0.4);
+        }
+
+        .drop-zone:hover,
+        .drop-zone.active {
+            border-color: var(--matrix-green);
+            box-shadow: 0 0 30px var(--matrix-green);
+            background: rgba(0, 40, 20, 0.6);
+        }
+
+        .drop-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            color: var(--matrix-green-dim);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        button {
+            background: transparent;
+            color: var(--matrix-green);
+            border: 2px solid var(--matrix-green);
+            padding: 14px 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        button:hover {
+            background: var(--matrix-green);
+            color: #000;
+            box-shadow: 0 0 35px var(--matrix-green);
+        }
+
+        button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        #loading {
+            display: none;
+            text-align: center;
+            margin: 60px 0;
+            font-size: 1.8rem;
+            color: var(--matrix-green);
+            text-shadow: 0 0 15px var(--matrix-green);
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
                 opacity: 1;
             }
         }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 20px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            animation: popIn 0.8s ease-in-out;
-            position: relative;
-            overflow: hidden;
-        }
-
-        form::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(74, 144, 226, 0.1), rgba(255, 255, 255, 0.1));
-            z-index: -1;
-            animation: gradientMove 3s infinite linear;
-        }
-
-        @keyframes gradientMove {
-            0% {
-                background-position: 0% 50%;
-            }
-            100% {
-                background-position: 100% 50%;
-            }
-        }
-
-        .upload-label {
-            font-size: 1.2em;
-            color: #4a90e2;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        input[type="file"] {
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 2px dashed #4a90e2;
-            border-radius: 10px;
-            width: 100%;
-            text-align: center;
-            cursor: pointer;
-            transition: border-color 0.3s ease, background-color 0.3s ease;
-        }
-
-        input[type="file"]:hover {
-            border-color: #357ab8;
-            background-color: rgba(74, 144, 226, 0.1);
-        }
-
-        input[type="file"]::file-selector-button {
+        #results {
             display: none;
+            margin-top: 40px;
         }
 
-        .upload-instructions {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: -10px;
-            margin-bottom: 15px;
-            text-align: center;
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 25px;
         }
 
-        button {
-            padding: 10px 20px;
-            background: #4a90e2;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
-
-        button:hover {
-            background: #357ab8;
-            transform: translateY(-2px);
-        }
-
-        #result {
-            margin-top: 20px;
+        .result-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
             padding: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            animation: fadeIn 1s ease-in-out;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+            transition: all 0.3s;
         }
 
-        .image-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
+        .result-card:hover {
+            border-color: var(--matrix-green);
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.25);
+        }
+
+        .card-title {
+            color: var(--matrix-green);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            border-bottom: 1px solid var(--border-glow);
+            padding-bottom: 8px;
         }
 
         img {
-            max-width: 45%;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        img:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        h3 {
-            text-align: center;
-            color: #4a90e2;
-            margin-top: 20px;
+            width: 100%;
+            border: 1px solid #003300;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
         }
 
         #extractedText {
-            font-family: 'Courier New', monospace;
-            background: #f9f9f9;
-            padding: 10px;
-            border-radius: 5px;
+            background: #000;
+            border: 1px solid #003300;
+            padding: 20px;
+            min-height: 180px;
+            font-size: 1.15rem;
+            line-height: 1.6;
             white-space: pre-wrap;
-            overflow-x: auto;
-            animation: fadeIn 1s ease-in-out;
+            color: var(--matrix-green);
+            text-shadow: 0 0 5px var(--matrix-green-dim);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
         }
 
-        p {
+        #metadata {
+            font-size: 0.95rem;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .meta-line {
+            margin: 8px 0;
+            padding: 6px;
+            border-left: 4px solid var(--matrix-green-dim);
+            background: rgba(0, 20, 10, 0.3);
+        }
+
+        .meta-key {
+            color: var(--matrix-green);
+            font-weight: bold;
+        }
+
+        .error-msg {
+            background: rgba(255, 0, 68, 0.15);
+            border: 1px solid var(--error-red);
+            color: var(--error-red);
+            padding: 20px;
+            margin: 30px 0;
             text-align: center;
-            font-size: 1.1em;
+            font-size: 1.3rem;
+            display: none;
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin: 30px 0;
+            grid-column: 1 / -1;
+        }
+
+        .action-btn {
+            background: transparent;
+            color: var(--matrix-green);
+            border: 2px solid var(--matrix-green);
+            padding: 12px 35px;
+            font-size: 1.2rem;
+            margin: 0 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: var(--matrix-green);
+            color: #000;
+            box-shadow: 0 0 25px var(--matrix-green);
         }
 
         footer {
             text-align: center;
-            margin-top: 30px;
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        footer a {
-            color: #4a90e2;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: #357ab8;
+            margin-top: 80px;
+            color: #003300;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
         }
     </style>
 </head>
 
 <body>
-    <h1>Analyser les Textes Cachés</h1>
-    <form id="uploadForm" enctype="multipart/form-data">
-        <label class="upload-label" for="imageUpload">Téléchargez votre image</label>
-        <input id="imageUpload" type="file" name="image" accept="image/*" required>
-        <p class="upload-instructions">Formats acceptés : JPG, PNG, GIF. Taille maximale : 5 Mo.</p>
-        <button type="submit">Détecter</button>
-    </form>
 
-    <div id="result">
-        <div class="image-container" id="images"></div>
-        <h3>Texte Extrait :</h3>
-        <div id="extractedText"></div>
+    <div class="container">
+        <header>
+            <h1 class="glitch">ESPION_2.0</h1>
+            <div class="terminal-prompt">[root@darknet ~]# ./espion --target=image --mode=deep_forensic</div>
+        </header>
+
+        <div class="upload-terminal">
+            <form id="uploadForm">
+                <div class="drop-zone" id="dropZone">
+                    <i class="fas fa-terminal drop-icon"></i>
+                    <p style="font-size:1.5rem; margin:15px 0;">DROP YOUR TARGET HERE OR CLICK TO SELECT</p>
+                    <p style="color:#004d1a; font-size:1.1rem;">PNG • JPG • JPEG • Max 12MB</p>
+                </div>
+                <input type="file" id="imageUpload" name="image" accept="image/*" required>
+                <button type="submit" id="launchBtn">EXECUTE FORENSIC BREACH</button>
+            </form>
+
+            <div id="loading">
+                <i class="fas fa-circle-notch fa-spin" style="font-size:3rem; margin-bottom:20px;"></i><br>
+                [BREACH IN PROGRESS] ... decrypting layers ... extracting ghosts ...
+            </div>
+        </div>
+
+        <div id="errorMsg" class="error-msg"></div>
+
+        <div id="results">
+            <div class="grid">
+                <div class="result-card">
+                    <div class="card-title">ORIGINAL CAPTURE</div>
+                    <div id="originalImg"></div>
+                </div>
+
+                <div class="result-card">
+                    <div class="card-title">REVEAL CHANNELS (RGB SPLIT + ENHANCE)</div>
+                    <div id="revealImg"></div>
+                </div>
+
+                <div class="result-card">
+                    <div class="card-title">INPAINT RECONSTRUCTION</div>
+                    <div id="repairedImg"></div>
+                </div>
+
+                <div class="result-card">
+                    <div class="card-title">DETECTED MASK / OVERLAY</div>
+                    <div id="maskImg"></div>
+                </div>
+
+                <div class="result-card" style="grid-column: 1 / -1;">
+                    <div class="card-title">DECRYPTED TEXT / OCR PAYLOAD</div>
+                    <div id="extractedText">Awaiting breach result...</div>
+                </div>
+
+                <div class="result-card" style="grid-column: 1 / -1;">
+                    <div class="card-title">EXIF & HIDDEN METADATA DUMP</div>
+                    <div id="metadata"></div>
+                </div>
+
+                <div class="action-buttons result-card" style="grid-column:1 / -1;">
+                    <button class="action-btn" onclick="generateReport()">GÉNÉRER RAPPORT PDF</button>
+                    <button class="action-btn" onclick="downloadAll()">TÉLÉCHARGER ARCHIVE (ZIP)</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>SYSTEM_STATUS: COMPROMISED • ROGAS_TECH_BLACKNET • 2026</footer>
     </div>
 
-    <footer>
-        <p>Développé avec ❤️ par <a href="#">ROGAS TECH</a></p>
-    </footer>
-
     <script>
-        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+        let currentAnalysisId = null;
+
+        const form = document.getElementById('uploadForm');
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('imageUpload');
+        const launchBtn = document.getElementById('launchBtn');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+        const errorMsg = document.getElementById('errorMsg');
+
+        ['dragenter', 'dragover'].forEach(ev => dropZone.addEventListener(ev, e => { e.preventDefault(); dropZone.classList.add('active'); }));
+        ['dragleave', 'drop'].forEach(ev => dropZone.addEventListener(ev, e => { e.preventDefault(); dropZone.classList.remove('active'); }));
+
+        dropZone.addEventListener('drop', e => { fileInput.files = e.dataTransfer.files; updateDropText(); });
+        dropZone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', updateDropText);
+
+        function updateDropText() {
+            if (fileInput.files.length > 0) {
+                dropZone.innerHTML = `<i class="fas fa-file-code drop-icon"></i><p style="font-size:1.4rem;">${fileInput.files[0].name}</p>`;
+            }
+        }
+
+        form.addEventListener('submit', async e => {
             e.preventDefault();
-            document.getElementById('images').innerHTML = '<p>Chargement...</p>';
+            if (!fileInput.files.length) { showError("NO TARGET SELECTED. DROP SOMETHING FIRST."); return; }
 
-            const formData = new FormData(e.target);
-            const response = await fetch('/', { method: 'POST', body: formData });
-            const data = await response.json();
+            launchBtn.disabled = true;
+            dropZone.style.pointerEvents = 'none';
+            loading.style.display = 'block';
+            results.style.display = 'none';
+            errorMsg.style.display = 'none';
 
-            if (data.success) {
-                document.getElementById('images').innerHTML = `
-                    <img src="/uploads/${data.result_image}" alt="Image réparée">
-                `;
-                document.getElementById('extractedText').innerText = data.text || "Aucun texte détecté";
-            } else {
-                document.getElementById('result').innerHTML = `
-                    <p style="color:red;">Erreur : ${data.error}</p>
-                `;
+            const formData = new FormData(form);
+
+            try {
+                const res = await fetch('/', { method: 'POST', body: formData });
+                const data = await res.json();
+
+                loading.style.display = 'none';
+                launchBtn.disabled = false;
+                dropZone.style.pointerEvents = 'auto';
+
+                if (data.success) {
+                    currentAnalysisId = data.analysis_id;
+                    results.style.display = 'block';
+
+                    document.getElementById('originalImg').innerHTML = `<img src="/upload/${data.original}" alt="Original">`;
+                    document.getElementById('revealImg').innerHTML = `<img src="/upload/${data.reveal}" alt="Reveal">`;
+                    document.getElementById('repairedImg').innerHTML = `<img src="/upload/${data.repaired}" alt="Repaired">`;
+                    document.getElementById('maskImg').innerHTML = `<img src="/upload/${data.mask}" alt="Mask">`;
+
+                    document.getElementById('extractedText').textContent = data.text || "NO VISIBLE PAYLOAD RECOVERED — TRY ANOTHER LAYER OR TECHNIQUE.";
+
+                    const metaDiv = document.getElementById('metadata');
+                    metaDiv.innerHTML = '';
+                    if (data.metadata && Object.keys(data.metadata).length > 0) {
+                        for (const [key, val] of Object.entries(data.metadata)) {
+                            metaDiv.innerHTML += `<div class="meta-line"><span class="meta-key">${key}</span> → ${val}</div>`;
+                        }
+                    } else {
+                        metaDiv.innerHTML = '<div class="meta-line">NO EXIF / METADATA DETECTED</div>';
+                    }
+                } else {
+                    showError(data.error || "BREACH FAILED — UNKNOWN EXCEPTION");
+                }
+            } catch (err) {
+                loading.style.display = 'none';
+                launchBtn.disabled = false;
+                dropZone.style.pointerEvents = 'auto';
+                showError("CONNECTION LOST / SERVER OFFLINE → " + err.message);
             }
         });
+
+        function generateReport() {
+            if (!currentAnalysisId) { alert("Pas d'analyse active."); return; }
+            window.location.href = `/report/${currentAnalysisId}`;
+        }
+
+        function downloadAll() {
+            if (!currentAnalysisId) { alert("Pas d'analyse active."); return; }
+            alert("Fonction ZIP en cours d'implémentation - pour l'instant télécharge les images manuellement via clic droit.");
+            // Plus tard : window.location.href = `/zip/${currentAnalysisId}`;
+        }
+
+        function showError(msg) {
+            errorMsg.textContent = msg;
+            errorMsg.style.display = 'block';
+        }
     </script>
 </body>
 
